@@ -6,7 +6,7 @@ export const crescendo: GameDef = {
   id: 'crescendo',
   name: 'Crescendo',
   tagline: '10 numéros sur 25 + 1 lettre attribuée au hasard · 7 tirages le samedi',
-  color: '#8e44ad',
+  color: '#6a3d9a',
   pools: [
     { key: 'numbers', label: 'Numéros', size: 25, drawCount: 10, playerChooses: true, ballStyle: 'main' },
     {

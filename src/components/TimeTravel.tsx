@@ -81,7 +81,7 @@ export function TimeTravel({ startMinute, currentMinute, withTime, expectedYears
   const generations = Math.floor(years / 25);
 
   return (
-    <section className="card time-travel">
+    <section className="time-travel">
       <div className="time-travel__top">
         <div className={`year-dial ${running ? 'is-running' : ''}`} aria-hidden="true">
           <svg viewBox="-50 -50 100 100">
@@ -112,7 +112,7 @@ export function TimeTravel({ startMinute, currentMinute, withTime, expectedYears
           <div className="duration">{formatDuration(elapsedMin)}</div>
           {generations >= 1 && (
             <div className="generations">
-              👨‍👩‍👧 {generations === 1 ? 'Ce sont tes enfants qui jouent' : `${fmtInt(generations)} générations ont joué à ta place`}
+              {generations === 1 ? 'Ce sont tes enfants qui jouent' : `${fmtInt(generations)} générations ont joué à ta place`}
             </div>
           )}
         </div>
@@ -140,9 +140,7 @@ export function TimeTravel({ startMinute, currentMinute, withTime, expectedYears
             <>
               Tu joues depuis <strong>{m2s(last)}</strong>
             </>
-          ) : (
-            <>C’est parti…</>
-          )}
+          ) : null}
           {next && (
             <span className="muted">
               {' '}

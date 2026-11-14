@@ -63,22 +63,19 @@ export function GridEditor({ game, grid, index, canRemove, onChange, onRemove }:
   const complete = isGridComplete(game, grid);
 
   return (
-    <section className={`card grid-editor ${complete ? 'is-complete' : ''}`}>
+    <section className={`grid-editor ${complete ? 'is-complete' : ''}`}>
       <header className="grid-editor__head">
-        <h3>
-          Grille {index + 1}
-          {complete && <span className="tag tag--ok">complète</span>}
-        </h3>
+        <h3>Grille {index + 1}</h3>
         <div className="grid-editor__actions">
           <button type="button" className="btn btn--flash" onClick={() => onChange(flashGrid(game, grid))} disabled={complete}>
-            ⚡ Flash
+            Flash
           </button>
           <button type="button" className="btn btn--ghost" onClick={clear}>
             Effacer
           </button>
           {canRemove && (
             <button type="button" className="btn btn--ghost btn--danger" onClick={onRemove} aria-label={`Supprimer la grille ${index + 1}`}>
-              ✕
+              Supprimer
             </button>
           )}
         </div>

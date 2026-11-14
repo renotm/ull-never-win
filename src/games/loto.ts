@@ -6,7 +6,7 @@ export const loto: GameDef = {
   id: 'loto',
   name: 'Loto',
   tagline: '5 numéros sur 49 + 1 numéro Chance sur 10 · lundi, mercredi, samedi',
-  color: '#d6336c',
+  color: '#b0305a',
   pools: [
     { key: 'numbers', label: 'Numéros', size: 49, drawCount: 5, playerChooses: true, ballStyle: 'main' },
     { key: 'chance', label: 'Numéro Chance', size: 10, drawCount: 1, playerChooses: true, ballStyle: 'chance' },

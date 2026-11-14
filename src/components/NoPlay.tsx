@@ -28,64 +28,60 @@ export function NoPlay({ years, staked, won, samples, onClose }: Props) {
 
   return (
     <div className="noplay">
-      <div className="noplay__head">
-        <div>
-          <h2>Et si tu n’avais pas joué ?</h2>
-          <p className="muted">
-            Les mêmes sommes, mises de côté à chaque tirage pendant {formatDuration(years * MINUTES_PER_YEAR)}, sur un
-            Livret A puis un LDDS.
-          </p>
-        </div>
-        <button type="button" className="btn btn--ghost" onClick={onClose}>
-          ↩ Retour à la simulation
+      <div className="game-head">
+        <h2 className="game-title">Et si tu n’avais pas joué ?</h2>
+        <p className="muted">
+          Les mêmes sommes, mises de côté à chaque tirage pendant {formatDuration(years * MINUTES_PER_YEAR)}, sur un Livret A
+          puis un LDDS.
+        </p>
+        <button type="button" className="btn btn--link" onClick={onClose}>
+          Retour à la simulation
         </button>
       </div>
 
       <div className="versus">
-        <section className="card versus__card versus__card--play">
-          <div className="label">🎰 En jouant</div>
+        <section className="versus__col versus__col--play">
+          <h3>En jouant</h3>
           <div className="versus__amount">{fmtEurBig(won)}</div>
-          <div className="muted">gagnés au total</div>
-          <ul className="versus__details">
-            <li>
-              Misé : <strong>{fmtEurBig(staked)}</strong>
-            </li>
-            <li>
-              Solde : <strong className={balance >= 0 ? 'good' : 'bad'}>{fmtEurBig(balance)}</strong>
-            </li>
-          </ul>
+          <p className="muted">gagnés au total</p>
+          <dl className="versus__details">
+            <dt>Misé</dt>
+            <dd>{fmtEurBig(staked)}</dd>
+            <dt>Solde</dt>
+            <dd className={balance >= 0 ? 'good' : 'bad'}>{fmtEurBig(balance)}</dd>
+          </dl>
         </section>
 
-        <div className="versus__vs" aria-hidden="true">
-          VS
-        </div>
-
-        <section className="card versus__card versus__card--save">
-          <div className="label">🐷 Sans jouer</div>
+        <section className="versus__col versus__col--save">
+          <h3>Sans jouer</h3>
           <div className="versus__amount">
             <BigEur a={s.total} />
           </div>
-          <div className="muted">d’épargne à la fin</div>
-          <ul className="versus__details">
-            <li>
-              Versé sur les livrets : <strong>{fmtEurBig(s.depositedLivrets)}</strong>
-            </li>
-            <li>
-              Intérêts : <strong className="good">+<BigEur a={interests} /></strong>
-            </li>
+          <p className="muted">d’épargne à la fin</p>
+          <dl className="versus__details">
+            <dt>Versé sur les livrets</dt>
+            <dd>{fmtEurBig(s.depositedLivrets)}</dd>
+            <dt>Intérêts</dt>
+            <dd className="good">
+              +<BigEur a={interests} />
+            </dd>
             {s.cash > 0 && (
-              <li>
-                Resté sur le compte courant (livrets pleins) : <strong>{fmtEurBig(s.cash)}</strong>
-              </li>
+              <>
+                <dt>Resté sur le compte courant</dt>
+                <dd>{fmtEurBig(s.cash)}</dd>
+              </>
             )}
             {s.fullAfterYears !== null && (
-              <li className="muted">Livrets pleins au bout de {fmtInt(Math.ceil(s.fullAfterYears))} ans</li>
+              <>
+                <dt>Livrets pleins après</dt>
+                <dd>{fmtInt(Math.ceil(s.fullAfterYears))} ans</dd>
+              </>
             )}
-          </ul>
+          </dl>
         </section>
       </div>
 
-      <section className={`card verdict ${diff >= 0 ? 'verdict--save' : 'verdict--play'}`}>
+      <p className="verdict">
         {diff >= 0 ? (
           <>
             Ne pas jouer t’aurait laissé{' '}
@@ -93,44 +89,50 @@ export function NoPlay({ years, staked, won, samples, onClose }: Props) {
           </>
         ) : (
           <>
-            🍀 Cette fois, jouer a été payant : <strong>{fmtEurBig(-diff)}</strong> de plus qu’en épargnant. Une chance qui ne
-            se reproduit presque jamais : relance quelques simulations pour t’en convaincre.
+            Cette fois, jouer a rapporté <strong>{fmtEurBig(-diff)}</strong> de plus que l’épargne.
           </>
         )}
-      </section>
+      </p>
 
       {astronomical && <Cosmic total={s.total} />}
 
       {s.curve && s.curve.length > 1 && <Chart curve={s.curve} samples={samples} years={years} />}
 
-      <section className="card">
-        <h3>Avec cette épargne, tu aurais pu t’offrir…</h3>
-        <ul className="purchases">
-          {PURCHASES.map((p) => {
-            const countLog = s.total.log10 - Math.log10(p.price);
-            const affordable = countLog >= 0;
-            return (
-              <li key={p.label} className={affordable ? 'is-affordable' : ''}>
-                <span className="purchases__emoji" aria-hidden="true">
-                  {p.emoji}
-                </span>
-                <span className="purchases__count">{affordable ? <Count log10={countLog} /> : '✗'}</span>
-                <span className="purchases__label">{p.label}</span>
-                <span className="purchases__price muted">
-                  {affordable ? `${fmtEurBig(p.price)} pièce` : `il manque ${fmtEurBig(p.price - s.total.value)}`}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+      <section>
+        <h3>Avec cette épargne, tu aurais pu t’offrir</h3>
+        <div className="table-wrap">
+          <table className="purchases">
+            <thead>
+              <tr>
+                <th></th>
+                <th className="num">Prix</th>
+                <th className="num">Quantité</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PURCHASES.map((p) => {
+                const countLog = s.total.log10 - Math.log10(p.price);
+                const affordable = countLog >= 0;
+                return (
+                  <tr key={p.label} className={affordable ? '' : 'is-out'}>
+                    <td>{p.label}</td>
+                    <td className="num">{fmtEurBig(p.price)}</td>
+                    <td className="num">
+                      {affordable ? <Count log10={countLog} /> : `il manque ${fmtEurBig(p.price - s.total.value)}`}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <p className="muted small">
-        Hypothèses : Livret A ({fmtEur(LIVRET_A_CAP)} de plafond) puis LDDS ({fmtEur(LDDS_CAP)}), au taux de{' '}
-        {(LIVRET_RATE * 100).toLocaleString('fr-FR')} % net en vigueur depuis août 2026, supposé constant. Intérêts capitalisés
-        chaque année : ils peuvent dépasser le plafond, mais plus aucun versement n’est possible une fois celui-ci atteint. Au-delà,
-        l’argent reste sur un compte courant non rémunéré. Les gains du joueur ne sont pas placés. Pas d’inflation : prix et
-        montants en euros d’aujourd’hui, prix indicatifs.
+        Livret A ({fmtEur(LIVRET_A_CAP)} de plafond) puis LDDS ({fmtEur(LDDS_CAP)}), à{' '}
+        {(LIVRET_RATE * 100).toLocaleString('fr-FR')} % net (taux d’août 2026), supposé constant. Intérêts capitalisés chaque
+        année : ils peuvent dépasser le plafond, mais on ne peut plus verser une fois celui-ci atteint ; le reste va sur un compte
+        courant non rémunéré. Les gains du joueur ne sont pas placés. Sans inflation, prix indicatifs en euros d’aujourd’hui.
       </p>
     </div>
   );
@@ -149,12 +151,10 @@ export function BigEur({ a }: { a: Amount }) {
 function Count({ log10 }: { log10: number }) {
   if (log10 < 15) {
     const n = Math.floor(Math.pow(10, log10) + 1e-9);
-    return <>× {n >= 1e6 ? fmtBig(n) : fmtInt(n)}</>;
+    return <>{n >= 1e6 ? fmtBig(n) : fmtInt(n)}</>;
   }
   return (
-    <>
-      × <Pow log10={log10} />
-    </>
+    <Pow log10={log10} />
   );
 }
 
@@ -173,10 +173,10 @@ function Cosmic({ total }: { total: Amount }) {
   const reached = COSMIC.filter((c) => total.log10 >= c.log10);
   const timesWorld = total.log10 - WORLD_WEALTH_LOG;
   return (
-    <section className="card cosmic">
-      <h3>🌌 Les intérêts composés s’emballent</h3>
+    <section className="cosmic">
+      <h3>Intérêts composés</h3>
       <p>
-        À 1,7 % par an pendant si longtemps, les intérêts des livrets atteignent un montant qui n’a plus aucun sens :{' '}
+        À 1,7 % par an sur une telle durée, les livrets atteignent{' '}
         <strong>
           <BigEur a={total} />
         </strong>
@@ -189,10 +189,7 @@ function Cosmic({ total }: { total: Amount }) {
           ))}
         </ul>
       )}
-      <p className="muted small">
-        Évidemment, aucune banque ne survivrait aussi longtemps. Mais c’est la magie (ou la folie) des intérêts composés : ce qui
-        compte, ce n’est pas le taux, c’est le temps.
-      </p>
+      <p className="muted small">Calcul purement théorique : aucun placement ne dure aussi longtemps.</p>
     </section>
   );
 }
@@ -231,7 +228,7 @@ function Chart({ curve, samples, years }: ChartProps) {
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => f * maxY);
 
   return (
-    <section className="card">
+    <section>
       <h3>Évolution dans le temps</h3>
       <div className="chart-legend">
         <span className="chart-legend__item chart-legend__item--save">Sans jouer : épargne</span>

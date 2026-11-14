@@ -33,22 +33,23 @@ export function Setup({ state, onChange, onLaunch }: Props) {
     return (
       <div className="setup">
         <h2 className="step-title">
-          <span className="step-num">1</span> Choisis ton jeu
+          <span className="step-num">1</span> Jeu
         </h2>
-        <div className="game-list">
+        <ul className="game-list">
           {GAMES.map((g) => (
-            <button
-              key={g.id}
-              type="button"
-              className="game-card"
-              style={{ '--accent': g.color } as React.CSSProperties}
-              onClick={() => onChange(initialStateFor(g, state.duration))}
-            >
-              <span className="game-card__name">{g.name}</span>
-              <span className="game-card__tagline">{g.tagline}</span>
-            </button>
+            <li key={g.id}>
+              <button
+                type="button"
+                className="game-row"
+                style={{ '--accent': g.color } as React.CSSProperties}
+                onClick={() => onChange(initialStateFor(g, state.duration))}
+              >
+                <span className="game-row__name">{g.name}</span>
+                <span className="game-row__rules">{g.tagline}</span>
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     );
   }
@@ -86,20 +87,18 @@ export function Setup({ state, onChange, onLaunch }: Props) {
 
   return (
     <div className="setup" style={{ '--accent': game.color } as React.CSSProperties}>
-      <div className="setup__game">
-        <div>
-          <h2 className="game-title">{game.name}</h2>
-          <p className="muted">{game.tagline}</p>
-        </div>
-        <button type="button" className="btn btn--ghost" onClick={() => onChange({ ...EMPTY_SETUP, duration: state.duration })}>
+      <div className="game-head">
+        <h2 className="game-title">{game.name}</h2>
+        <p className="muted">{game.tagline}</p>
+        <button type="button" className="btn btn--link" onClick={() => onChange({ ...EMPTY_SETUP, duration: state.duration })}>
           Changer de jeu
         </button>
       </div>
 
       <h2 className="step-title">
-        <span className="step-num">2</span> Remplis tes grilles
+        <span className="step-num">2</span> Grilles
         <button type="button" className="btn btn--flash btn--small" onClick={flashAll} disabled={incomplete === 0}>
-          ⚡ Flash sur toutes les grilles
+          Flash sur toutes les grilles
         </button>
       </h2>
       <div className="grids">
@@ -114,16 +113,15 @@ export function Setup({ state, onChange, onLaunch }: Props) {
             onRemove={() => removeGrid(i)}
           />
         ))}
-        <button type="button" className="card add-grid" onClick={addGrid}>
-          <span className="add-grid__plus">+</span>
-          Ajouter une grille
-        </button>
       </div>
+      <button type="button" className="btn add-grid" onClick={addGrid}>
+        + Ajouter une grille
+      </button>
 
       <h2 className="step-title">
-        <span className="step-num">3</span> Choisis les tirages
+        <span className="step-num">3</span> Tirages
       </h2>
-      <div className="card draw-options">
+      <div className="draw-options">
         {game.drawOptions.map((o) => (
           <label key={o.id} className={`chip ${state.options.includes(o.id) ? 'is-on' : ''}`}>
             <input type="checkbox" checked={state.options.includes(o.id)} onChange={() => toggleOption(o.id)} />
@@ -142,14 +140,14 @@ export function Setup({ state, onChange, onLaunch }: Props) {
       </div>
 
       <h2 className="step-title">
-        <span className="step-num">4</span> Choisis la durée simulée
+        <span className="step-num">4</span> Durée simulée
       </h2>
-      <div className="card">
+      <div>
         <div className="draw-options">
           {DURATIONS.map((d) => (
             <label
               key={d.id}
-              className={`chip ${state.duration === d.id ? 'is-on' : ''} ${d.years === null ? 'chip--warn' : ''}`}
+              className={`chip ${state.duration === d.id ? 'is-on' : ''}`}
               title={d.detail}
             >
               <input
@@ -158,7 +156,6 @@ export function Setup({ state, onChange, onLaunch }: Props) {
                 checked={state.duration === d.id}
                 onChange={() => onChange({ ...state, duration: d.id })}
               />
-              {d.years === null && '⚠️ '}
               {d.label}
               {d.detail && <span className="chip__detail">{d.detail}</span>}
             </label>
@@ -166,22 +163,21 @@ export function Setup({ state, onChange, onLaunch }: Props) {
         </div>
         {duration.years === null ? (
           <div className="warning">
-            <strong>Attention, ça peut être (très) long.</strong> Avec ces grilles et ces tirages, il faut en moyenne{' '}
-            <strong>{fmtBig(Math.round(meanDraws))} tirages</strong>
+            En moyenne, il faut <strong>{fmtBig(Math.round(meanDraws))} tirages</strong>
             {meanYears > 0 && (
               <>
-                , soit environ <strong>{fmtInt(meanYears)} ans</strong> de jeu
+                {' '}
+                (<strong>{fmtInt(meanYears)} ans</strong> de jeu)
               </>
             )}{' '}
-            et <strong>{meanSeconds < 10 ? 'quelques secondes' : `environ ${fmtSeconds(meanSeconds)}`}</strong> de calcul à vitesse
-            maximale. Ce n’est qu’une moyenne : la chance peut tarder bien plus longtemps. Tu pourras mettre en pause ou arrêter
-            à tout moment.
+            et <strong>{meanSeconds < 10 ? 'quelques secondes' : fmtSeconds(meanSeconds)}</strong> de calcul à vitesse maximale.
+            Ce n’est qu’une moyenne : ça peut durer beaucoup plus. La simulation peut être mise en pause ou arrêtée.
           </div>
         ) : (
           duration.statistical && (
             <p className="muted small">
-              Durée trop longue pour tirer chaque boule : la simulation passe en <strong>mode statistique</strong> (on tire
-              directement le nombre de gains de chaque rang selon les probabilités officielles).
+              Trop de tirages pour les jouer un par un : le nombre de gains de chaque rang est tiré directement d’après les
+              probabilités officielles (mode statistique).
             </p>
           )
         )}
@@ -209,7 +205,7 @@ export function Setup({ state, onChange, onLaunch }: Props) {
           )}
         </div>
         <button type="button" className="btn btn--primary btn--big" disabled={!canLaunch} onClick={onLaunch}>
-          ▶ Lancer le jeu
+          Lancer le jeu
         </button>
       </div>
     </div>

@@ -18,9 +18,6 @@ export function App() {
       <header className="app__header">
         <h1>
           <button type="button" className="home-link" onClick={goHome} title="Revenir à l’accueil">
-            <span className="logo" aria-hidden="true">
-              ●
-            </span>{' '}
             Simulateur de tirages
           </button>
         </h1>
@@ -36,8 +33,8 @@ export function App() {
       </main>
 
       <footer className="app__footer muted small">
-        Simulation non officielle, sans lien avec la Française des Jeux. Les tirages sont générés par le navigateur
-        (crypto.getRandomValues). Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non
+        Simulation non officielle, sans lien avec la Française des Jeux. Les tirages sont faits au hasard dans le
+        navigateur. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non
         surtaxé).
       </footer>
     </div>

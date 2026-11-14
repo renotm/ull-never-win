@@ -6,7 +6,7 @@ export const euromillions: GameDef = {
   id: 'euromillions',
   name: 'EuroMillions',
   tagline: '5 numéros sur 50 + 2 étoiles sur 12 · mardi, vendredi',
-  color: '#1c64d1',
+  color: '#1f4f99',
   pools: [
     { key: 'numbers', label: 'Numéros', size: 50, drawCount: 5, playerChooses: true, ballStyle: 'main' },
     { key: 'stars', label: 'Étoiles', size: 12, drawCount: 2, playerChooses: true, ballStyle: 'star' },

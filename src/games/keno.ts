@@ -18,8 +18,8 @@ const PRIZES: Record<number, [number, number][]> = {
 export const keno: GameDef = {
   id: 'keno',
   name: 'Keno',
-  tagline: '16 numéros tirés sur 56 · cochez de 4 à 10 numéros · tous les jours à 20h',
-  color: '#e8590c',
+  tagline: '16 numéros tirés sur 56 · 4 à 10 numéros à cocher · tous les jours à 20h',
+  color: '#b94c14',
   pools: [{ key: 'numbers', label: 'Numéros', size: 56, drawCount: 16, playerChooses: true, ballStyle: 'main' }],
   pickCounts: [10],
   pickRange: [4, 10],

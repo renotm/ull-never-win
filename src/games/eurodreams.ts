@@ -7,7 +7,7 @@ export const eurodreams: GameDef = {
   id: 'eurodreams',
   name: 'EuroDreams',
   tagline: '6 numéros sur 40 + 1 numéro Dream sur 5 · lundi, jeudi',
-  color: '#0f9d8a',
+  color: '#11766a',
   pools: [
     { key: 'numbers', label: 'Numéros', size: 40, drawCount: 6, playerChooses: true, ballStyle: 'main' },
     { key: 'dream', label: 'Numéro Dream', size: 5, drawCount: 1, playerChooses: true, ballStyle: 'dream' },

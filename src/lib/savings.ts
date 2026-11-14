@@ -113,7 +113,6 @@ function logSum(a: number, b: number): number {
 /* ---------- Ce qu'on aurait pu s'offrir ---------- */
 
 export interface Purchase {
-  emoji: string;
   label: string;
   /** Prix indicatif (€, 2026). */
   price: number;
@@ -121,25 +120,25 @@ export interface Purchase {
 
 /** Prix indicatifs, ordres de grandeur en France en 2026. */
 export const PURCHASES: Purchase[] = [
-  { emoji: '☕', label: 'un café en terrasse', price: 2.5 },
-  { emoji: '🎬', label: 'une place de cinéma', price: 12 },
-  { emoji: '🍽️', label: 'un restaurant pour deux', price: 80 },
-  { emoji: '📱', label: 'un smartphone haut de gamme', price: 1_200 },
-  { emoji: '🏖️', label: 'une semaine de vacances en famille', price: 3_000 },
-  { emoji: '🚗', label: 'une citadine neuve', price: 20_000 },
-  { emoji: '🚙', label: 'un SUV familial neuf', price: 40_000 },
-  { emoji: '🏡', label: 'une maison en province', price: 250_000 },
-  { emoji: '🏎️', label: 'une Ferrari', price: 300_000 },
-  { emoji: '🏙️', label: 'un appartement de 100 m² à Paris', price: 1_000_000 },
-  { emoji: '🛥️', label: 'un yacht de 40 mètres', price: 20_000_000 },
-  { emoji: '🛩️', label: 'un jet privé long-courrier', price: 60_000_000 },
-  { emoji: '✈️', label: 'un Airbus A380', price: 450_000_000 },
-  { emoji: '⚽', label: 'un grand club de football européen', price: 4_000_000_000 },
-  { emoji: '🌍', label: 'toute la production mondiale d’une année (PIB mondial)', price: 100e12 },
-  { emoji: '💰', label: 'toute la richesse des ménages de la planète', price: 450e12 },
+  { label: 'Café en terrasse', price: 2.5 },
+  { label: 'Place de cinéma', price: 12 },
+  { label: 'Restaurant pour deux', price: 80 },
+  { label: 'Smartphone haut de gamme', price: 1_200 },
+  { label: 'Semaine de vacances en famille', price: 3_000 },
+  { label: 'Citadine neuve', price: 20_000 },
+  { label: 'SUV familial neuf', price: 40_000 },
+  { label: 'Maison en province', price: 250_000 },
+  { label: 'Ferrari', price: 300_000 },
+  { label: 'Appartement de 100 m² à Paris', price: 1_000_000 },
+  { label: 'Yacht de 40 mètres', price: 20_000_000 },
+  { label: 'Jet privé long-courrier', price: 60_000_000 },
+  { label: 'Airbus A380', price: 450_000_000 },
+  { label: 'Grand club de football européen', price: 4_000_000_000 },
+  { label: 'Production mondiale d’une année (PIB mondial)', price: 100e12 },
+  { label: 'Richesse de tous les ménages de la planète', price: 450e12 },
 ];
 
-/** Repères pour les montants astronomiques (option « pour rire »). */
+/** Repères pour les montants astronomiques. */
 export const COSMIC: { log10: number; text: string }[] = [
   { log10: 50, text: 'plus d’euros que d’atomes sur la Terre (environ 10^50)' },
   { log10: 80, text: 'plus d’euros que d’atomes dans tout l’Univers observable (environ 10^80)' },
