@@ -71,7 +71,7 @@ export function GridEditor({ game, grid, index, canRemove, onChange, onRemove }:
         </h3>
         <div className="grid-editor__actions">
           <button type="button" className="btn btn--flash" onClick={() => onChange(flashGrid(game, grid))} disabled={complete}>
-            ⚡ Flash
+            Flash
           </button>
           <button type="button" className="btn btn--ghost" onClick={clear}>
             Effacer

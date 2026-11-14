@@ -112,7 +112,7 @@ export function TimeTravel({ startMinute, currentMinute, withTime, expectedYears
           <div className="duration">{formatDuration(elapsedMin)}</div>
           {generations >= 1 && (
             <div className="generations">
-              👨‍👩‍👧 {generations === 1 ? 'Ce sont tes enfants qui jouent' : `${fmtInt(generations)} générations ont joué à ta place`}
+              {generations === 1 ? 'Ce sont tes enfants qui jouent' : `${fmtInt(generations)} générations ont joué à ta place`}
             </div>
           )}
         </div>
@@ -140,13 +140,10 @@ export function TimeTravel({ startMinute, currentMinute, withTime, expectedYears
             <>
               Tu joues depuis <strong>{m2s(last)}</strong>
             </>
-          ) : (
-            <>C’est parti…</>
-          )}
+          ) : null}
           {next && (
             <span className="muted">
-              {' '}
-              · prochain repère : {next.phrase ? next.label : `${next.label} (${fmtYears(next.years)})`}
+              . Prochain repère : {next.phrase ? next.label : `${next.label} (${fmtYears(next.years)})`}
             </span>
           )}
         </div>

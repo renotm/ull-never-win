@@ -1,3 +1,8 @@
+/* Hallmark · checked: 2026-11-14 · genre: playful (inferred) · shape: app screen
+ * floor: 0 FAIL · reflex: 0 (1 waived: 39b) · fixed: 2a 7a 10a 26a 27 30a 39a 48 63 67 · structural: printed in the handoff
+ * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · waive 39b · button.game-card à 144px · chaque carte porte le nom du jeu, ses numéros et ses tirages : c'est le choix du jeu, pas un bouton de barre d'outils */
+/* Hallmark · dismissed 49 · .btn sets white-space: nowrap, so these two button labels never wrap */
 :root {
   --bg: #f5f3ee;
   --surface: #ffffff;
@@ -9,7 +14,29 @@
   --bad: #c92a2a;
   --gold: #f4b400;
   --accent: #d6336c;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 16px rgba(0, 0, 0, 0.05);
+  /* Encre posée sur l'accent ou sur une couleur de jeu : un blanc teinté, jamais #fff. */
+  --on-accent: #fffcf8;
+  --on-accent-muted: color-mix(in srgb, var(--on-accent) 85%, transparent);
+  --on-accent-line: color-mix(in srgb, var(--on-accent) 50%, transparent);
+  /* Vert assez soutenu pour porter du texte clair, dans les deux thèmes. */
+  --good-strong: #198754;
+  /* Encre sombre sur le jaune (étoiles, Flash). */
+  --ink-on-light: #2a241a;
+  --star: #f4b400;
+  --chance: #e03131;
+  --dream: #7048e8;
+  --letter: #f08c00;
+  --warn: var(--warn);
+  --shade: rgba(24, 18, 12, 0.2);
+  --overlay: rgba(24, 18, 12, 0.55);
+  --shadow: 0 1px 2px rgba(24, 18, 12, 0.05), 0 4px 16px rgba(24, 18, 12, 0.05);
+  --shadow-float: 0 8px 30px rgba(24, 18, 12, 0.12);
+  --focus-ring: var(--text);
+  /* Couleur du jeu assombrie : pour tout aplat ou texte qui doit être lu (4,5:1 avec --on-accent). */
+  --ink-deep: #1a1410;
+  --accent-ink: color-mix(in srgb, var(--accent) 75%, var(--ink-deep));
+  /* Redéclarée plus bas sur chaque élément qui pose son propre --accent. */
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --radius: 14px;
   color-scheme: light;
 }
@@ -24,7 +51,9 @@
     --border: #2f343d;
     --good: #40c057;
     --bad: #ff6b6b;
+    --good-strong: #1d6b3d;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.45);
     color-scheme: dark;
   }
 }
@@ -33,11 +62,16 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.45;
 }
 
@@ -46,6 +80,19 @@ h2,
 h3 {
   margin: 0;
   line-height: 1.2;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+/* Anneau de focus : instantané, partout où l'on peut cliquer. */
+:where(button, a, select, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.chip:has(input:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 h3 {
@@ -67,8 +114,6 @@ h3 {
 }
 .label {
   font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
   color: var(--muted);
 }
 
@@ -97,6 +142,7 @@ h3 {
 
 .card {
   min-width: 0;
+  color: var(--text);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -114,26 +160,27 @@ h3 {
   font-weight: 600;
   background: var(--surface-2);
   color: var(--text);
-  transition: transform 0.08s, filter 0.15s, background 0.15s;
+  transition: filter 0.15s, background-color 0.15s;
   white-space: nowrap;
 }
 .btn:hover:not(:disabled) {
   filter: brightness(1.05);
 }
 .btn:active:not(:disabled) {
-  transform: scale(0.97);
+  filter: brightness(0.92);
 }
 .btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+  filter: grayscale(1);
 }
 .btn--primary {
-  background: var(--accent);
-  color: #fff;
+  background: var(--accent-ink);
+  color: var(--on-accent);
 }
 .btn--flash {
   background: var(--gold);
-  color: #222;
+  color: var(--ink-on-light);
 }
 .btn--ghost {
   background: transparent;
@@ -167,8 +214,8 @@ h3 {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
+  background: var(--accent-ink);
+  color: var(--on-accent);
   font-size: 0.9rem;
 }
 .setup > .step-title:first-child {
@@ -188,16 +235,15 @@ h3 {
   border-radius: var(--radius);
   padding: 22px 18px;
   min-height: 130px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #000));
+  color: var(--on-accent);
+  background: var(--accent-ink);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: transform 0.15s;
 }
 .game-card:hover {
-  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--accent-ink) 88%, var(--text));
 }
 .game-card__name {
   font-size: 1.4rem;
@@ -216,16 +262,22 @@ h3 {
   flex-wrap: wrap;
   padding: 16px 20px;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #000));
-  color: #fff;
+  background: var(--accent-ink);
+  color: var(--on-accent);
 }
 .setup__game .muted {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--on-accent-muted);
   margin: 4px 0 0;
 }
+.setup__game,
+.sim__head,
+.noplay__head,
+.game-card {
+  --focus-ring: var(--on-accent);
+}
 .setup__game .btn--ghost {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--on-accent);
+  border-color: var(--on-accent-line);
 }
 .game-title {
   font-size: 1.5rem;
@@ -241,7 +293,7 @@ h3 {
   border-top: 4px solid var(--border);
 }
 .grid-editor.is-complete {
-  border-top-color: var(--accent);
+  border-top-color: var(--accent-ink);
 }
 .grid-editor__head {
   display: flex;
@@ -337,8 +389,8 @@ h3 {
   min-height: 160px;
 }
 .add-grid:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent-ink);
 }
 .add-grid__plus {
   font-size: 2rem;
@@ -363,10 +415,10 @@ h3 {
   font-weight: 600;
 }
 .chip input {
-  accent-color: var(--accent);
+  accent-color: var(--accent-ink);
 }
 .chip.is-on {
-  border-color: var(--accent);
+  border-color: var(--accent-ink);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
@@ -382,8 +434,7 @@ h3 {
   padding: 14px 18px;
   border-radius: var(--radius);
   background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-float);
 }
 .launch-bar__warn {
   color: var(--bad);
@@ -392,8 +443,6 @@ h3 {
 
 /* ---------- Boules ---------- */
 .ball {
-  --c: #fff;
-  --t: #222;
   font: inherit;
   font-weight: 700;
   display: inline-grid;
@@ -412,15 +461,14 @@ button.ball {
   max-width: 36px;
   justify-self: center;
   font-size: 0.8rem;
-  transition: transform 0.1s, background 0.1s;
 }
 button.ball:hover:not(:disabled) {
-  transform: scale(1.1);
-  border-color: var(--accent);
+  border-color: var(--accent-ink);
 }
 button.ball:disabled {
   opacity: 0.4;
-  cursor: default;
+  cursor: not-allowed;
+  color: var(--muted);
 }
 .ball--sm {
   width: 28px;
@@ -437,30 +485,33 @@ button.ball:disabled {
 .ball.is-selected,
 span.ball {
   border-color: transparent;
-  color: #fff;
-  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--ball) 55%, #fff), var(--ball) 55%, color-mix(in srgb, var(--ball) 75%, #000));
-  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  color: var(--on-accent);
+  background: var(--ball);
 }
 .ball--main {
-  --ball: var(--accent);
+  --ball: var(--accent-ink);
 }
 .ball--star {
-  --ball: #f4b400;
+  --ball: var(--star);
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
   border-radius: 0;
 }
 .ball--star.is-selected,
 span.ball--star {
-  color: #222;
+  color: var(--ink-on-light);
 }
 .ball--chance {
-  --ball: #e03131;
+  --ball: var(--chance);
 }
 .ball--dream {
-  --ball: #7048e8;
+  --ball: var(--dream);
 }
 .ball--letter {
-  --ball: #f08c00;
+  --ball: var(--letter);
+}
+span.ball--letter,
+.ball--letter.is-selected {
+  color: var(--ink-on-light);
 }
 .my-grids span.ball:not(.is-selected) {
   --ball: transparent;
@@ -474,7 +525,7 @@ span.ball--star {
   outline-offset: 2px;
 }
 .ball.is-animated {
-  animation: drop 0.35s cubic-bezier(0.3, 1.5, 0.6, 1) both;
+  animation: drop 0.3s ease-out both;
 }
 @keyframes drop {
   from {
@@ -506,20 +557,20 @@ span.ball--star {
   gap: 12px;
   padding: 16px 20px;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #000));
-  color: #fff;
+  background: var(--accent-ink);
+  color: var(--on-accent);
 }
 .sim__head .muted {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--on-accent-muted);
   margin: 4px 0 0;
 }
 .sim__head .btn--ghost {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--on-accent);
+  border-color: var(--on-accent-line);
 }
 .sim__head .btn--primary {
-  background: #fff;
-  color: var(--accent);
+  background: var(--on-accent);
+  color: var(--accent-ink);
 }
 .sim__head > * {
   min-width: 0;
@@ -534,7 +585,7 @@ span.ball--star {
 }
 .segmented {
   display: inline-flex;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--shade);
   border-radius: 999px;
   padding: 3px;
   overflow-x: auto;
@@ -545,7 +596,7 @@ span.ball--star {
   font: inherit;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--on-accent);
   background: transparent;
   border: none;
   border-radius: 999px;
@@ -554,8 +605,8 @@ span.ball--star {
   white-space: nowrap;
 }
 .segmented button.is-on {
-  background: #fff;
-  color: var(--accent);
+  background: var(--on-accent);
+  color: var(--accent-ink);
 }
 
 .stats {
@@ -601,7 +652,7 @@ span.ball--star {
 .duration {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-variant-numeric: tabular-nums;
 }
 .generations {
@@ -632,9 +683,6 @@ span.ball--star {
   stroke-width: 3;
   stroke-linecap: round;
 }
-.year-dial.is-running .year-dial__hand {
-  filter: drop-shadow(0 0 3px var(--accent));
-}
 .year-dial__pin {
   fill: var(--accent);
 }
@@ -653,8 +701,7 @@ span.ball--star {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 50%, var(--gold)), var(--accent));
-  transition: width 0.2s linear;
+  background: var(--accent-ink);
 }
 .timeline__tick {
   position: absolute;
@@ -790,8 +837,6 @@ td {
 }
 th {
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
   color: var(--muted);
 }
 .num {
@@ -815,12 +860,11 @@ tr.has-hits td {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--overlay);
   display: grid;
   place-items: center;
   padding: 16px;
   z-index: 10;
-  animation: fade 0.3s;
 }
 .modal__box {
   background: var(--surface);
@@ -829,11 +873,10 @@ tr.has-hits td {
   max-width: 480px;
   width: 100%;
   text-align: center;
-  animation: pop 0.4s cubic-bezier(0.3, 1.5, 0.6, 1);
 }
 .modal__box h2 {
   font-size: 2.2rem;
-  color: var(--accent);
+  color: var(--accent-ink);
   margin-bottom: 12px;
 }
 .modal__confetti {
@@ -844,17 +887,6 @@ tr.has-hits td {
   gap: 10px;
   justify-content: center;
   margin-top: 18px;
-}
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes pop {
-  from {
-    transform: scale(0.7);
-    opacity: 0;
-  }
 }
 
 @media (max-width: 520px) {
@@ -872,7 +904,7 @@ tr.has-hits td {
 
 /* Étoiles non tirées dans "Tes grilles" : la forme d'étoile masque la bordure. */
 .my-grids span.ball--star:not(.is-selected) {
-  background: color-mix(in srgb, #f4b400 30%, var(--surface));
+  background: color-mix(in srgb, var(--star) 30%, var(--surface));
 }
 
 /* ---------- Durée ---------- */
@@ -882,15 +914,15 @@ tr.has-hits td {
   color: var(--muted);
 }
 .chip--warn.is-on {
-  border-color: #e8590c;
-  background: color-mix(in srgb, #e8590c 12%, transparent);
+  border-color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
 }
 .warning {
   margin-top: 12px;
   padding: 12px 14px;
   border-radius: 10px;
-  border-left: 4px solid #e8590c;
-  background: color-mix(in srgb, #e8590c 10%, transparent);
+  border: 1px solid var(--warn);
+  background: color-mix(in srgb, var(--warn) 10%, transparent);
   font-size: 0.9rem;
 }
 .duration-bar__text {
@@ -904,8 +936,7 @@ tr.has-hits td {
   height: 14px;
 }
 .progress--big .progress__fill {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 50%, var(--gold)), var(--accent));
-  transition: width 0.2s linear;
+  background: var(--accent-ink);
 }
 .jackpot-count.is-on {
   font-weight: 600;
@@ -923,7 +954,7 @@ tr.has-hits td {
   cursor: pointer;
 }
 .home-link:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .modal__actions {
   flex-wrap: wrap;
@@ -931,8 +962,8 @@ tr.has-hits td {
 
 /* ---------- Et si tu n'avais pas joué ? ---------- */
 .btn--save {
-  background: var(--good);
-  color: #fff;
+  background: var(--good-strong);
+  color: var(--on-accent);
 }
 .modal__noplay {
   margin-top: 8px;
@@ -951,19 +982,19 @@ tr.has-hits td {
   flex-wrap: wrap;
   padding: 16px 20px;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--good), color-mix(in srgb, var(--good) 55%, #000));
-  color: #fff;
+  background: var(--good-strong);
+  color: var(--on-accent);
 }
 .noplay__head h2 {
   font-size: 1.5rem;
 }
 .noplay__head .muted {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--on-accent-muted);
   margin: 4px 0 0;
 }
 .noplay__head .btn--ghost {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--on-accent);
+  border-color: var(--on-accent-line);
 }
 .versus {
   display: grid;
@@ -1032,9 +1063,7 @@ tr.has-hits td {
 }
 .purchases li {
   display: grid;
-  grid-template-columns: 40px 1fr;
-  grid-template-rows: auto auto auto;
-  column-gap: 8px;
+  gap: 2px;
   padding: 10px 12px;
   border-radius: 10px;
   background: var(--surface-2);
@@ -1043,11 +1072,6 @@ tr.has-hits td {
 .purchases li.is-affordable {
   opacity: 1;
   background: color-mix(in srgb, var(--good) 10%, var(--surface-2));
-}
-.purchases__emoji {
-  grid-row: 1 / 4;
-  font-size: 1.8rem;
-  align-self: center;
 }
 .purchases__count {
   font-weight: 800;
@@ -1113,4 +1137,27 @@ tr.has-hits td {
   .versus__vs {
     text-align: center;
   }
+}
+
+/* Méta : des espaces plutôt que des points médians. */
+.meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ball.is-animated {
+    animation: none;
+  }
+  .btn {
+    transition: none;
+  }
+}
+
+/* Chaque jeu pose --accent sur son conteneur : la teinte lisible doit y être recalculée. */
+.setup,
+.sim,
+.game-card {
+  --accent-ink: color-mix(in srgb, var(--accent) 75%, var(--ink-deep));
 }

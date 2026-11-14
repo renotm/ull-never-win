@@ -99,7 +99,7 @@ export function Setup({ state, onChange, onLaunch }: Props) {
       <h2 className="step-title">
         <span className="step-num">2</span> Remplis tes grilles
         <button type="button" className="btn btn--flash btn--small" onClick={flashAll} disabled={incomplete === 0}>
-          ⚡ Flash sur toutes les grilles
+          Flash sur toutes les grilles
         </button>
       </h2>
       <div className="grids">
@@ -158,7 +158,6 @@ export function Setup({ state, onChange, onLaunch }: Props) {
                 checked={state.duration === d.id}
                 onChange={() => onChange({ ...state, duration: d.id })}
               />
-              {d.years === null && '⚠️ '}
               {d.label}
               {d.detail && <span className="chip__detail">{d.detail}</span>}
             </label>
@@ -166,22 +165,21 @@ export function Setup({ state, onChange, onLaunch }: Props) {
         </div>
         {duration.years === null ? (
           <div className="warning">
-            <strong>Attention, ça peut être (très) long.</strong> Avec ces grilles et ces tirages, il faut en moyenne{' '}
-            <strong>{fmtBig(Math.round(meanDraws))} tirages</strong>
+            En moyenne, il faut <strong>{fmtBig(Math.round(meanDraws))} tirages</strong>
             {meanYears > 0 && (
               <>
-                , soit environ <strong>{fmtInt(meanYears)} ans</strong> de jeu
+                {' '}
+                (<strong>{fmtInt(meanYears)} ans</strong> de jeu)
               </>
             )}{' '}
-            et <strong>{meanSeconds < 10 ? 'quelques secondes' : `environ ${fmtSeconds(meanSeconds)}`}</strong> de calcul à vitesse
-            maximale. Ce n’est qu’une moyenne : la chance peut tarder bien plus longtemps. Tu pourras mettre en pause ou arrêter
-            à tout moment.
+            et <strong>{meanSeconds < 10 ? 'quelques secondes' : fmtSeconds(meanSeconds)}</strong> de calcul à vitesse maximale.
+            Ce n’est qu’une moyenne : ça peut durer beaucoup plus. La simulation peut être mise en pause ou arrêtée.
           </div>
         ) : (
           duration.statistical && (
             <p className="muted small">
-              Durée trop longue pour tirer chaque boule : la simulation passe en <strong>mode statistique</strong> (on tire
-              directement le nombre de gains de chaque rang selon les probabilités officielles).
+              Trop de tirages pour les jouer un par un : le nombre de gains de chaque rang est tiré directement d’après les
+              probabilités officielles (<strong>mode statistique</strong>).
             </p>
           )
         )}
@@ -189,9 +187,17 @@ export function Setup({ state, onChange, onLaunch }: Props) {
 
       <div className="launch-bar">
         <div className="launch-bar__summary">
-          <strong>{state.grids.length}</strong> grille{state.grids.length > 1 ? 's' : ''} ·{' '}
-          <strong>{fmtInt(drawsPerWeek)}</strong> tirage{drawsPerWeek > 1 ? 's' : ''} par semaine ·{' '}
-          <strong>{fmtEur(costPerDraw * drawsPerWeek)}</strong> par semaine
+          <span className="meta-list">
+            <span>
+              <strong>{state.grids.length}</strong> grille{state.grids.length > 1 ? 's' : ''}
+            </span>
+            <span>
+              <strong>{fmtInt(drawsPerWeek)}</strong> tirage{drawsPerWeek > 1 ? 's' : ''} par semaine
+            </span>
+            <span>
+              <strong>{fmtEur(costPerDraw * drawsPerWeek)}</strong> par semaine
+            </span>
+          </span>
           {totalDraws !== null && (
             <div>
               Sur {lowerFirst(duration.label)} : <strong>{fmtBig(totalDraws)}</strong>{' '}
@@ -209,7 +215,7 @@ export function Setup({ state, onChange, onLaunch }: Props) {
           )}
         </div>
         <button type="button" className="btn btn--primary btn--big" disabled={!canLaunch} onClick={onLaunch}>
-          ▶ Lancer le jeu
+          Lancer le jeu
         </button>
       </div>
     </div>

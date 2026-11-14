@@ -147,10 +147,18 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
       <div className="sim__head">
         <div>
           <h2 className="game-title">{game.name}</h2>
-          <p className="muted">
-            {grids.length} grille{grids.length > 1 ? 's' : ''} · {schedule.perWeek} tirage{schedule.perWeek > 1 ? 's' : ''} par
-            semaine · {fmtEur(costPerDraw)} par tirage · durée : {lowerFirst(duration.label)}
-            {duration.detail ? ` (${duration.detail})` : ''}
+          <p className="muted meta-list">
+            <span>
+              {grids.length} grille{grids.length > 1 ? 's' : ''}
+            </span>
+            <span>
+              {schedule.perWeek} tirage{schedule.perWeek > 1 ? 's' : ''} par semaine
+            </span>
+            <span>{fmtEur(costPerDraw)} par tirage</span>
+            <span>
+              durée : {lowerFirst(duration.label)}
+              {duration.detail ? ` (${duration.detail})` : ''}
+            </span>
           </p>
         </div>
         <div className="sim__controls">
@@ -179,23 +187,23 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
           {!finished &&
             (running ? (
               <button type="button" className="btn btn--primary" onClick={() => send({ type: 'pause' })}>
-                ⏸ Pause
+                Pause
               </button>
             ) : (
               <button type="button" className="btn btn--primary" onClick={() => send({ type: 'resume' })}>
-                ▶ Reprendre
+                Reprendre
               </button>
             ))}
           <button type="button" className="btn btn--ghost" onClick={onBack}>
-            ↩ Modifier mes grilles
+            Modifier mes grilles
           </button>
           {finished && (
             <button type="button" className="btn btn--primary" onClick={openNoPlay}>
-              🐷 Et si tu n’avais pas joué ?
+              Et si tu n’avais pas joué ?
             </button>
           )}
           <button type="button" className="btn btn--ghost" onClick={onHome}>
-            ⌂ Accueil
+            Accueil
           </button>
         </div>
       </div>
@@ -204,7 +212,7 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
         <section className="card duration-bar">
           <div className="duration-bar__text">
             <span>
-              <strong>{(fraction * 100).toLocaleString('fr-FR', { maximumFractionDigits: fraction < 0.1 ? 1 : 0 })} %</strong> de la durée simulée · fin le{' '}
+              <strong>{(fraction * 100).toLocaleString('fr-FR', { maximumFractionDigits: fraction < 0.1 ? 1 : 0 })} %</strong> de la durée simulée, fin le{' '}
               {formatMinute(endMinute, withTime)}
             </span>
             <span className="muted">
@@ -215,7 +223,7 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
                   : secondsLeft > 0.5
                     ? `encore ~${fmtSeconds(secondsLeft)}`
                     : 'presque fini…'}
-              {duration.statistical && ' · mode statistique'}
+              {duration.statistical && ', mode statistique'}
             </span>
           </div>
           <div className="progress progress--big">
@@ -275,9 +283,9 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
               .
             </span>
             <span className={jackpotCount > 0 ? 'jackpot-count is-on' : 'jackpot-count'}>
-              {jackpotCount > 0 ? '🎉 ' : ''}Gros lots gagnés : <strong>{fmtInt(jackpotCount)}</strong>
+              Gros lots gagnés : <strong>{fmtInt(jackpotCount)}</strong>
               {jackpot && !duration.statistical && (
-                <span className="muted"> · le premier le {formatMinute(schedule.minuteOf(jackpot.drawIndex), withTime)}</span>
+                <span className="muted"> (le premier le {formatMinute(schedule.minuteOf(jackpot.drawIndex), withTime)})</span>
               )}
             </span>
           </div>
@@ -347,7 +355,7 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
                 <li key={`${ev.drawIndex}-${ev.gridIndex}-${ev.rank}`} className={ev.rank === 0 ? 'is-jackpot' : ''}>
                   <span className="events__prize">{fmtEur(ev.prize)}</span>
                   <span>
-                    Grille {ev.gridIndex + 1} · rang {ev.rank + 1} ({ranksPerGrid[ev.gridIndex][ev.rank].label})
+                    Grille {ev.gridIndex + 1}, rang {ev.rank + 1} ({ranksPerGrid[ev.gridIndex][ev.rank].label})
                   </span>
                   <span className="muted">{formatMinute(schedule.minuteOf(ev.drawIndex), withTime)}</span>
                 </li>
@@ -360,10 +368,8 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
       <Recap game={game} grids={grids} ranksPerGrid={ranksPerGrid} progress={progress} />
 
       <p className="muted small">
-        Montants : {game.sources.join(' · ')}. Les gains marqués « ~ » sont des moyennes observées : les vrais montants varient
+        Montants : {game.sources.join(' ; ')}. Les gains marqués « ~ » sont des moyennes observées : les vrais montants varient
         d’un tirage à l’autre.
-        {duration.statistical &&
-          ' Mode statistique : le nombre de gains de chaque rang est tiré directement selon les probabilités officielles, grille par grille.'}
       </p>
 
       {finished && showModal && (
@@ -371,10 +377,7 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
           <div className="modal__box">
             {maxDraws === null && jackpot ? (
               <>
-                <div className="modal__confetti" aria-hidden="true">
-                  🎉
-                </div>
-                <h2>Gros lot !</h2>
+                <h2>Gros lot</h2>
                 <p>
                   La grille {jackpot.gridIndex + 1} remporte <strong>{fmtEur(jackpot.prize)}</strong> au tirage n°{' '}
                   {fmtInt(jackpot.drawIndex + 1)}, le{' '}
@@ -388,22 +391,19 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
               </>
             ) : (
               <>
-                <div className="modal__confetti" aria-hidden="true">
-                  {jackpotCount > 0 ? '🎉' : '⏳'}
-                </div>
                 <h2>Bilan : {lowerFirst(duration.label)}</h2>
                 <p>
                   <strong>{fmtBig(draws)}</strong> tirages joués, du {formatMinute(schedule.minuteOf(0), false)} au{' '}
                   {formatMinute(currentMinute, false)}.
                 </p>
                 <p>
-                  Misé : <strong>{fmtEurBig(staked)}</strong> · gagné : <strong>{fmtEurBig(won)}</strong>
+                  Misé : <strong>{fmtEurBig(staked)}</strong>, gagné : <strong>{fmtEurBig(won)}</strong>
                 </p>
                 <p>
                   {jackpotCount > 0 ? (
                     <>
                       Gros lot gagné <strong>{fmtBig(jackpotCount)} fois</strong>
-                      {jackpotCount === 1 ? ' !' : '.'}
+                      .
                     </>
                   ) : (
                     <>
@@ -419,7 +419,7 @@ export function Simulation({ game, grids, optionIds, durationId, onBack, onHome 
               {staked > 0 && <span className="small"> ({fmtInt((won / staked) * 100)} % des mises redistribuées)</span>}
             </p>
             <button type="button" className="btn btn--save btn--big modal__noplay" onClick={openNoPlay}>
-              🐷 Et si tu n’avais pas joué ?
+              Et si tu n’avais pas joué ?
             </button>
             <div className="modal__actions">
               <button type="button" className="btn btn--ghost" onClick={() => setShowModal(false)}>

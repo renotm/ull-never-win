@@ -1,0 +1,14 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "polish",
+  "scope": "app",
+  "shape": "app screen",
+  "theme": "project",
+  "prompt": "simulateur de tirages FDJ, polish",
+  "waived": [
+   "39b"
+  ],
+  "date": "2026-11-14"
+ }
+]

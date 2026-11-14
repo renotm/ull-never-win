@@ -37,13 +37,13 @@ export function NoPlay({ years, staked, won, samples, onClose }: Props) {
           </p>
         </div>
         <button type="button" className="btn btn--ghost" onClick={onClose}>
-          ↩ Retour à la simulation
+          Retour à la simulation
         </button>
       </div>
 
       <div className="versus">
         <section className="card versus__card versus__card--play">
-          <div className="label">🎰 En jouant</div>
+          <div className="label">En jouant</div>
           <div className="versus__amount">{fmtEurBig(won)}</div>
           <div className="muted">gagnés au total</div>
           <ul className="versus__details">
@@ -61,7 +61,7 @@ export function NoPlay({ years, staked, won, samples, onClose }: Props) {
         </div>
 
         <section className="card versus__card versus__card--save">
-          <div className="label">🐷 Sans jouer</div>
+          <div className="label">Sans jouer</div>
           <div className="versus__amount">
             <BigEur a={s.total} />
           </div>
@@ -93,8 +93,7 @@ export function NoPlay({ years, staked, won, samples, onClose }: Props) {
           </>
         ) : (
           <>
-            🍀 Cette fois, jouer a été payant : <strong>{fmtEurBig(-diff)}</strong> de plus qu’en épargnant. Une chance qui ne
-            se reproduit presque jamais : relance quelques simulations pour t’en convaincre.
+            Cette fois, jouer a rapporté <strong>{fmtEurBig(-diff)}</strong> de plus que l’épargne.
           </>
         )}
       </section>
@@ -111,9 +110,6 @@ export function NoPlay({ years, staked, won, samples, onClose }: Props) {
             const affordable = countLog >= 0;
             return (
               <li key={p.label} className={affordable ? 'is-affordable' : ''}>
-                <span className="purchases__emoji" aria-hidden="true">
-                  {p.emoji}
-                </span>
                 <span className="purchases__count">{affordable ? <Count log10={countLog} /> : '✗'}</span>
                 <span className="purchases__label">{p.label}</span>
                 <span className="purchases__price muted">
@@ -174,9 +170,9 @@ function Cosmic({ total }: { total: Amount }) {
   const timesWorld = total.log10 - WORLD_WEALTH_LOG;
   return (
     <section className="card cosmic">
-      <h3>🌌 Les intérêts composés s’emballent</h3>
+      <h3>Les intérêts composés s’emballent</h3>
       <p>
-        À 1,7 % par an pendant si longtemps, les intérêts des livrets atteignent un montant qui n’a plus aucun sens :{' '}
+        À 1,7 % par an sur une telle durée, les livrets atteignent{' '}
         <strong>
           <BigEur a={total} />
         </strong>
@@ -189,10 +185,7 @@ function Cosmic({ total }: { total: Amount }) {
           ))}
         </ul>
       )}
-      <p className="muted small">
-        Évidemment, aucune banque ne survivrait aussi longtemps. Mais c’est la magie (ou la folie) des intérêts composés : ce qui
-        compte, ce n’est pas le taux, c’est le temps.
-      </p>
+      <p className="muted small">Calcul théorique : aucun placement ne dure aussi longtemps.</p>
     </section>
   );
 }

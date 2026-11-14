@@ -113,7 +113,6 @@ function logSum(a: number, b: number): number {
 /* ---------- Ce qu'on aurait pu s'offrir ---------- */
 
 export interface Purchase {
-  emoji: string;
   label: string;
   /** Prix indicatif (€, 2026). */
   price: number;
@@ -121,22 +120,22 @@ export interface Purchase {
 
 /** Prix indicatifs, ordres de grandeur en France en 2026. */
 export const PURCHASES: Purchase[] = [
-  { emoji: '☕', label: 'un café en terrasse', price: 2.5 },
-  { emoji: '🎬', label: 'une place de cinéma', price: 12 },
-  { emoji: '🍽️', label: 'un restaurant pour deux', price: 80 },
-  { emoji: '📱', label: 'un smartphone haut de gamme', price: 1_200 },
-  { emoji: '🏖️', label: 'une semaine de vacances en famille', price: 3_000 },
-  { emoji: '🚗', label: 'une citadine neuve', price: 20_000 },
-  { emoji: '🚙', label: 'un SUV familial neuf', price: 40_000 },
-  { emoji: '🏡', label: 'une maison en province', price: 250_000 },
-  { emoji: '🏎️', label: 'une Ferrari', price: 300_000 },
-  { emoji: '🏙️', label: 'un appartement de 100 m² à Paris', price: 1_000_000 },
-  { emoji: '🛥️', label: 'un yacht de 40 mètres', price: 20_000_000 },
-  { emoji: '🛩️', label: 'un jet privé long-courrier', price: 60_000_000 },
-  { emoji: '✈️', label: 'un Airbus A380', price: 450_000_000 },
-  { emoji: '⚽', label: 'un grand club de football européen', price: 4_000_000_000 },
-  { emoji: '🌍', label: 'toute la production mondiale d’une année (PIB mondial)', price: 100e12 },
-  { emoji: '💰', label: 'toute la richesse des ménages de la planète', price: 450e12 },
+  { label: 'un café en terrasse', price: 2.5 },
+  { label: 'une place de cinéma', price: 12 },
+  { label: 'un restaurant pour deux', price: 80 },
+  { label: 'un smartphone haut de gamme', price: 1_200 },
+  { label: 'une semaine de vacances en famille', price: 3_000 },
+  { label: 'une citadine neuve', price: 20_000 },
+  { label: 'un SUV familial neuf', price: 40_000 },
+  { label: 'une maison en province', price: 250_000 },
+  { label: 'une Ferrari', price: 300_000 },
+  { label: 'un appartement de 100 m² à Paris', price: 1_000_000 },
+  { label: 'un yacht de 40 mètres', price: 20_000_000 },
+  { label: 'un jet privé long-courrier', price: 60_000_000 },
+  { label: 'un Airbus A380', price: 450_000_000 },
+  { label: 'un grand club de football européen', price: 4_000_000_000 },
+  { label: 'toute la production mondiale d’une année (PIB mondial)', price: 100e12 },
+  { label: 'toute la richesse des ménages de la planète', price: 450e12 },
 ];
 
 /** Repères pour les montants astronomiques (option « pour rire »). */
