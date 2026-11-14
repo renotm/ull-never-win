@@ -18,6 +18,12 @@ Il faut Node 16 ou plus.
 
 `dist/` doit être servi par un serveur web, par exemple GitHub Pages, Netlify ou `npx serve dist`. En ouvrant directement `index.html` (adresse `file://`), le navigateur bloque les modules et le Web Worker.
 
+## Mise en ligne
+
+L'appli est publiée sur GitHub Pages : https://renotm.github.io/ull-never-win/
+
+À chaque push sur `master`, le workflow `.github/workflows/deploy.yml` lance les tests, construit l'appli et publie `dist/`. Pour que ça marche, une seule fois : dans GitHub, *Settings → Pages → Build and deployment → Source*, choisir **GitHub Actions**.
+
 ## Organisation
 
 - `src/games/` : un fichier par jeu, qui décrit les urnes, les jours de tirage, les mises et la table des rangs et des gains. Pour ajouter un jeu, il suffit d'ajouter un fichier et de le déclarer dans `index.ts`.
